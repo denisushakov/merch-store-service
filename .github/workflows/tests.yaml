@@ -62,4 +62,13 @@ jobs:
       - name: Run tests
         env:
           CONFIG_PATH: ./configs/values_local.yaml
-        run: go test ./... -v
+        run: go test ./... -coverprofile=coverage.out -covermode=atomic -v
+
+      - name: Show coverage summary
+        run: go tool cover -func=coverage.out
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage.out
