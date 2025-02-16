@@ -1,4 +1,4 @@
-name: Go Test Pipeline
+name: Go Test Pipline
 
 on:
   push:
@@ -9,20 +9,57 @@ on:
       - main
 
 jobs:
-  run-tests:
+  build_and_test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U test -d test_db"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: 1.22
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.22
 
-    - name: Install dependencies
-      run: go mod tidy
+      - name: Create test config
+        run: |
+          mkdir -p configs
+          cat <<EOT > configs/values_local.yaml
+          db:
+            host: localhost
+            port: 5432
+            user: test
+            password: test
+            name: test_db
+          server:
+            port: 8080
+          jwt:
+            secret: testsecret
+            expiration: 3600
+          EOT
 
-    - name: Run tests
-      run: go test ./... -v
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Build
+        run: go build ./...
+
+      - name: Run tests
+        env:
+          CONFIG_PATH: ./configs/values_local.yaml
+        run: go test ./... -v
