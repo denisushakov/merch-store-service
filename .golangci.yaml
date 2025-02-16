@@ -9,8 +9,6 @@ linters-settings:
     simplify: true
   staticcheck:
     checks: ["all"]
-  unused:
-    check-exported: true
   govet: {}
 
 linters:

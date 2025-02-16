@@ -1,0 +1,9 @@
+server:
+  host:
+  port: 8080
+
+merch:
+  schema: http
+  host: merch
+  port: 8080
+  jwtsecret: jwtsecret
