@@ -1,0 +1,3 @@
+/configs/values_local.yaml
+*.exe   
+*.env

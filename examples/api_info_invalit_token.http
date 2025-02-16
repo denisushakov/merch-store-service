@@ -1,0 +1,7 @@
+# curl -X GET "http://localhost:8080/api/info"
+#  -H "Authorization: Bearer jwt-token"
+GET http://localhost:8080/api/info
+Authorization: Bearer jwt-token
+
+###
+

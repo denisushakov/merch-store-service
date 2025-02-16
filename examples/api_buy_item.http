@@ -1,0 +1,3 @@
+### Buy Item - GET /api/buy/{item} (Покупка мерча)
+GET http://localhost:8080/api/buy/t-shirt
+Authorization: Bearer jwt-token

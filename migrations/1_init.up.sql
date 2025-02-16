@@ -1,0 +1,37 @@
+CREATE TABLE IF NOT EXISTS users
+(
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    coins INT DEFAULT 1000,
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS transactions
+(
+    id SERIAL PRIMARY KEY,
+    from_user_id INT NOT NULL,
+    to_user_id INT NOT NULL,
+    amount INT NOT NULL,
+    created_at TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (from_user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (to_user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS inventory
+(
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    item_name VARCHAR(255) NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT unique_inventory UNIQUE(user_id, item_name)
+);
+
+CREATE TABLE IF NOT EXISTS products
+(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    price INT NOT NULL
+);

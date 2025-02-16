@@ -1,0 +1,9 @@
+### Send Coins - POST /api/sendCoin (Отправка монет)
+POST http://localhost:8080/api/sendCoin
+Content-Type: application/json
+Authorization: Bearer jwt-token
+
+{
+  "toUser": "user",
+  "amount": 5
+}
